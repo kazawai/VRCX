@@ -1868,6 +1868,7 @@ speechSynthesis.getVoices();
                 $previousLocation: '',
                 $customTag: '',
                 $customTagColour: '',
+                $isWhiteListed: false,
                 //
                 ...json
             };
@@ -6369,6 +6370,13 @@ speechSynthesis.getVoices();
                 }
             }
         }
+
+        if (noty.type === "invite" && this.whitelistInvites) {
+            var inviteUserId = noty.senderUserId;
+            if (inviteUserId in this.whitelist) {
+                this.acceptNotification(noty);
+            }
+        }
     };
 
     $app.methods.notyGetImage = async function (noty) {
@@ -8045,6 +8053,19 @@ speechSynthesis.getVoices();
             database.deleteAvatarMemo(avatarId);
         }
     };
+
+    // #endregion
+    // #region | App: User Invite WhiteList 
+
+    $app.methods.getLocalUserInviteWhiteList = async function () {
+        try {
+            return await database.getLocalUserInviteWhiteList();
+        } catch (err) {}
+        return {
+            whiteList: []
+        };
+    };
+
 
     // #endregion
     // #region | App: Friends

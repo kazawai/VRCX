@@ -313,6 +313,21 @@ class Database {
         );
     }
 
+    // Invite Whitelist
+    
+    async getLocalUserInviteWhitelist() {
+        var inviteWhitelist = [];
+        await sqliteService.execute((dbRow) => {
+            var row = {
+                userId: dbRow[0],
+                displayName: dbRow[1],
+                created_at: dbRow[2]
+            };
+            inviteWhitelist.push(row);
+        }, `SELECT * FROM invite_whitelist`);
+        return inviteWhitelist;
+    }
+
     async getFriendLogCurrent() {
         var friendLogCurrent = [];
         await sqliteService.execute((dbRow) => {
